@@ -5,7 +5,7 @@ begin
   require "jeweler"
   Jeweler::Tasks.new do |gem|
     gem.name = "vidibus-routing_error"
-    gem.summary = %Q{Catches ActionController::RoutingError}
+    gem.summary = %Q{Catches ActionController::RoutingError in Rails 3.}
     gem.description = %Q{Catches ActionController::RoutingError and sends it to a custom method.}
     gem.email = "andre@vidibus.com"
     gem.homepage = "http://github.com/vidibus/vidibus-routing_error"
