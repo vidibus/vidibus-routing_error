@@ -1,17 +1,38 @@
 = vidibus-routing_error
 
-Description goes here.
+This gem is part of the open source SOA framework Vidibus: http://www.vidibus.org
 
-== Note on Patches/Pull Requests
- 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+Catches ActionController::RoutingError, because this does not work with Rails 3 anymore.
+It basically catches the exception on rack-level and re-raises it on application-level.
+
+
+== Installation
+
+Add the dependency to the Gemfile of your application:
+
+  gem "vidibus-inheritance"
+
+Then call bundle install on your console.
+
+
+== Usage
+
+class ApplicationController < ActionController::Base
+  rescue_from ActionController::RoutingError, :with => :rescue_404
+
+  def rescue_404
+    # do something
+    # IMPORTANT:
+    # If you modify this method, you have to restart the server.
+  end
+end
+
 
 == Copyright
 
 Copyright (c) 2010 Andre Pankratz. See LICENSE for details.
+
+
+== Thank you!
+
+The development of this gem was sponsored by Käuferportal: http://www.kaeuferportal.de
