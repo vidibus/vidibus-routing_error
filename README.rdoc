@@ -2,30 +2,32 @@
 
 This gem is part of the open source SOA framework Vidibus: http://www.vidibus.org
 
-Catches ActionController::RoutingError, because this does not work with Rails 3 anymore.
-It basically catches the exception on rack-level and re-raises it on application-level.
+Catches ActionController::RoutingError which does not work with Rails 3 out of the box. It basically catches the exception on Rack-level and re-raises it on application-level.
 
 
 == Installation
 
 Add the dependency to the Gemfile of your application:
 
-  gem "vidibus-inheritance"
+  gem "vidibus-routing_error"
 
 Then call bundle install on your console.
 
 
 == Usage
 
-class ApplicationController < ActionController::Base
-  rescue_from ActionController::RoutingError, :with => :rescue_404
+With this gem installed, you are able to handle errors like in past versions of Rails:
 
-  def rescue_404
-    # do something
-    # IMPORTANT:
-    # If you modify this method, you have to restart the server.
+  class ApplicationController < ActionController::Base
+    rescue_from ActionController::RoutingError, :with => :rescue_404
+
+    def rescue_404
+      # do something
+      # IMPORTANT: If you modify this method, you have to restart the server.
+    end
   end
-end
+
+Keep in mind that you have to restart your server when changing the rescue-method!
 
 
 == Copyright
