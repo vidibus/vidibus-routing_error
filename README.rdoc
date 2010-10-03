@@ -30,6 +30,23 @@ With this gem installed, you are able to handle errors like in past versions of 
 Keep in mind that you have to restart your server when changing the rescue-method!
 
 
+== Possible issues
+
+Depending on the structure of your application, you might get an error in development like this:
+
+  TypeError (User can't be referred)
+
+This error is caused by some caching-reloading madness: The middleware implanted by this gem is cached. But in development, your classes usually aren't. Thus some classes may not be available under certain circumstances, e.g. if you are using before filters for user authentication. You should be able to get rid of the error above by turning on class caching. Try it (and restart the server afterwards):
+
+  # development.rb
+  config.cache_classes = true
+
+If the error is gone, you're lucky as I am. But since it is not feasible to cache classes in development, turn off class caching again and explicitly require the class that couldn't be referred. In my case, it's the user class:
+
+  # top of development.rb
+  require "app/models/user"
+
+
 == Copyright
 
 Copyright (c) 2010 Andre Pankratz. See LICENSE for details.
