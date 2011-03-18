@@ -1,8 +1,29 @@
 = vidibus-routing_error
 
-This gem is part of the open source SOA framework Vidibus: http://www.vidibus.org
+Catches ActionController::RoutingError which does not work with Rails 3
+out of the box. It basically catches the exception on Rack-level and
+re-raises it on application-level.
 
-Catches ActionController::RoutingError which does not work with Rails 3 out of the box. It basically catches the exception on Rack-level and re-raises it on application-level.
+This gem is part of the open source service-oriented {video
+framework}[http://vidibus.org] Vidibus.
+
+
+== Addressed Problem
+
+Since Rails 3 is based on Rack, catching a 404 error in your Application
+controller does not work as expected. The underlying problem is discussed
+{here}[https://rails.lighthouseapp.com/projects/8994/tickets/4444-can-no-longer-rescue_from-actioncontrollerroutingerror].
+
+An easy but insufficient fix for this issue is to define a catch-all route
+at the end of your routes.rb:
+
+  match "*a", :to => "application#rescue_404"
+
+*But beware of the major drawback!* If your application relies on engines that
+extend your app with their own routes, things will break because those
+routes will never get fired.
+
+With this gem, all your routing problems should be gone.
 
 
 == Installation
@@ -16,7 +37,8 @@ Then call bundle install on your console.
 
 == Usage
 
-With this gem installed, you are able to handle errors like in past versions of Rails:
+With this gem installed, you are able to handle errors like in past versions
+of Rails:
 
   class ApplicationController < ActionController::Base
     rescue_from ActionController::RoutingError, :with => :rescue_404
@@ -30,7 +52,20 @@ With this gem installed, you are able to handle errors like in past versions of 
 Keep in mind that you have to restart your server when changing the rescue-method!
 
 
-== Possible issues
+== Underlying Mechanics
+
+This gem implants the middleware Vidibus::RoutingError::Rack into your Rails stack
+right after ActionDispatch::ShowExceptions which returns a 404 response if no
+matching route was found for the current request.
+
+Vidibus::RoutingError::Rack catches the 404 status and redirects internally to the route
+/routing_error which is provided by this gem.
+
+Through this route the method RoutingErrorController#rescue gets called which then raises
+a ActionController::RoutingError on application level so you can rescue this error.
+
+
+== Possible Issues
 
 Depending on the structure of your application, you might get an error in development like this:
 
