@@ -6,18 +6,14 @@ module Vidibus
       end
 
       def call(env)
-        env["action_dispatch.show_exceptions"] = false
-        @app.call(env)
-      rescue => exception
-        if exception.kind_of?(ActionController::RoutingError)
-          env["vidibus-routing_error.exception"] = exception
+        response = @app.call(env)
+        if response[0] == 404
           env["vidibus-routing_error.request_uri"] = env["REQUEST_URI"]
-
-          # set routing_error path internally to catch route
           env["PATH_INFO"] = env["REQUEST_URI"] = "/routing_error"
+          @app.call(env)
+        else
+          response
         end
-        env["action_dispatch.show_exceptions"] = true
-        return @app.call(env)
       end
     end
   end
