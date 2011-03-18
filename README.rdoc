@@ -1,4 +1,4 @@
-= vidibus-routing_error
+= Vidibus::RoutingError
 
 Catches ActionController::RoutingError which does not work with Rails 3
 out of the box. It basically catches the exception on Rack-level and
