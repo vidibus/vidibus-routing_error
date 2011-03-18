@@ -19,7 +19,7 @@ at the end of your routes.rb:
 
   match "*a", :to => "application#rescue_404"
 
-*But beware of the major drawback!* If your application relies on engines that
+<b>But beware of the major drawback!</b> If your application relies on engines that
 extend your app with their own routes, things will break because those
 routes will never get fired.
 
