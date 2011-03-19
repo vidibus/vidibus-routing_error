@@ -17,7 +17,7 @@ controller does not work as expected. The underlying problem is discussed
 An easy but insufficient fix for this issue is to define a catch-all route
 at the end of your routes.rb:
 
-  match "*a", :to => "application#rescue_404"
+  match "*path", :to => "application#rescue_404"
 
 <b>But beware of the major drawback!</b> If your application relies on engines that
 extend your app with their own routes, things will break because those
@@ -67,16 +67,32 @@ a ActionController::RoutingError on application level so you can rescue this err
 
 == Possible Issues
 
-Depending on the structure of your application, you might get an error in development like this:
+=== Catch-all Route
+
+If your application has a catch-route, this gem won't work, because routes provided by
+engines will be added after any existing routes. If you don't need a catch-all route for
+other purposes than rescuing from routing errors, you can savely remove it.
+
+
+=== Class Caching
+
+Depending on the structure of your application, you might get an error in development
+like this:
 
   TypeError (User can't be referred)
 
-This error is caused by some caching-reloading madness: The middleware implanted by this gem is cached. But in development, your classes usually aren't. Thus some classes may not be available under certain circumstances, e.g. if you are using before filters for user authentication. You should be able to get rid of the error above by turning on class caching. Try it (and restart the server afterwards):
+This error is caused by some caching-reloading madness: The middleware implanted by
+this gem is cached. But in development, your classes usually aren't. Thus some classes
+may not be available under certain circumstances, e.g. if you are using before filters
+for user authentication provided by some engine. You should be able to get rid of
+the error above by turning on class caching. Try it (and restart the server afterwards):
 
   # development.rb
   config.cache_classes = true
 
-If the error is gone, you're lucky as I am. But since it is not feasible to cache classes in development, turn off class caching again and explicitly require the class that couldn't be referred. In my case, it's the user class:
+If the error is gone, you're lucky as I am. But since it is not feasible to cache classes
+in development, turn off class caching again and explicitly require the class that couldn't
+be referred. In my case, it's the user class:
 
   # top of development.rb
   require "app/models/user"
