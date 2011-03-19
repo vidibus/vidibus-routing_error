@@ -17,7 +17,7 @@ controller does not work as expected. The underlying problem is discussed
 An easy but insufficient fix for this issue is to define a catch-all route
 at the end of your routes.rb:
 
-  match "*path", :to => "application#rescue_404"
+  match "*path" => "application#rescue_404"
 
 <b>But beware of the major drawback!</b> If your application relies on engines that
 extend your app with their own routes, things will break because those
