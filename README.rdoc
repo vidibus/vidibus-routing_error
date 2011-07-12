@@ -51,6 +51,9 @@ of Rails:
 
 Keep in mind that you have to restart your server when changing the rescue-method!
 
+If you want to handle the error in a specific controller, you can also route the path 'routing_error' in routes.rb:
+
+  match 'routing_error', :to => 'my_controller#rescue_404' 
 
 == Underlying Mechanics
 
