@@ -11,7 +11,7 @@ for building distributed (video) applications.
 ## Deprecation Warning
 
 It is not advised to use this gem anymore. At least with Rails 3.2 it won't
-work anymore.
+work.
 
 In most cases the best advice is to add a catch-all route. But don't put
 it just at the end of `routes.rb` because that will disable all routes defined
