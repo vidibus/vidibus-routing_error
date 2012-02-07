@@ -4,13 +4,16 @@ Catches ActionController::RoutingError which does not work with Rails 3
 out of the box. It basically catches the exception on Rack-level and
 re-raises it on application-level.
 
-This gem is part of [Vidibus](http://vidibus.org), an open source toolset 
+This gem is part of [Vidibus](http://vidibus.org), an open source toolset
 for building distributed (video) applications.
 
 
-## Please Read This
+## Deprecation Warning
 
-In most cases it will be sufficient to add a catch-all route. But don't put 
+It is not advised to use this gem anymore. At least with Rails 3.2 it won't
+work anymore.
+
+In most cases the best advice is to add a catch-all route. But don't put
 it just at the end of `routes.rb` because that will disable all routes defined
 by gems your application uses. Instead, append the route in `application.rb`:
 
@@ -24,8 +27,6 @@ module PutYourApplicationNameHere
   end
 end
 ```
-
-If that won't work for any reason, you may still use this gem. :)
 
 
 ## Addressed Problem
@@ -98,9 +99,9 @@ env['vidibus-routing_error.request_uri']
 
 ### Catch-all Route
 
-If your application has a catch-route in `routes.rb`, this gem won't work, because 
-routes provided by engines will be added after any existing routes. If you don't 
-need a catch-all route for other purposes than rescuing from routing errors, you can 
+If your application has a catch-route in `routes.rb`, this gem won't work, because
+routes provided by engines will be added after any existing routes. If you don't
+need a catch-all route for other purposes than rescuing from routing errors, you can
 savely remove it.
 
 
