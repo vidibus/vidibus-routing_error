@@ -9,7 +9,7 @@ class RoutingErrorController < ApplicationController
   #   end
   #
   def rescue
-    env["REQUEST_URI"] = env["vidibus-routing_error.request_uri"]
-    raise ActionController::RoutingError, "No route matches #{env["REQUEST_URI"].inspect}"
+    env['REQUEST_URI'] = env['vidibus-routing_error.request_uri']
+    raise ActionController::RoutingError, "No route matches #{env['REQUEST_URI'].inspect}"
   end
 end
