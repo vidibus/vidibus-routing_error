@@ -11,18 +11,38 @@ for building distributed (video) applications.
 ## Deprecation Warning
 
 It is not advised to use this gem anymore. At least with Rails 3.2 it won't
-work.
+work. Please implement one of the following alternatives instead:
 
-In most cases the best advice is to add a catch-all route. But don't put
-it just at the end of `routes.rb` because that will disable all routes defined
-by gems your application uses. Instead, append the route in `application.rb`:
+### Alternative One
+
+José Valim [revealed a "hidden" feature](http://blog.plataformatec.com.br/2012/01/my-five-favorite-hidden-features-in-rails-3-2/)
+of Rails 3.2 that comes in handy. In Rails 3.2 you're able to define your 
+own app for handling exceptions that happen in the rack stack. Thus you 
+could set your own router to handle that in `application.rb`:
+
+```ruby
+config.exceptions_app = self.routes
+```
+
+Since your router is now responsible for dealing with all exceptions, you 
+could define a route that handles 404s:
+
+```ruby
+match '/404', :to => 'errors#not_found'
+```
+
+### Alternative Two
+
+Another possibility is to add a catch-all route. But don't put it just at the 
+end of `routes.rb` because that will disable all routes defined by engines that
+come with gems and such. Instead, append the route in `application.rb`:
 
 ```ruby
 module PutYourApplicationNameHere
   class Application < Rails::Application
     # Catch 404s
     config.after_initialize do |app|
-      app.routes.append{match '*path', :to => 'application#rescue_404'}
+      app.routes.append{match '*path', :to => 'errors#not_found'}
     end
   end
 end
